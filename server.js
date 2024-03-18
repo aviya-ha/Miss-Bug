@@ -32,8 +32,28 @@ app.get('/api/bug/save', (req, res) => {
             res.status(400).send('Cannot save bug')
         })
 })
-app.get('/api/bug/:bugId', (req, res) => { })
-app.get('/api/bug/:bugId/remove', (req, res) => { })
+
+app.get('/api/bug/:bugId', (req, res) => {
+    const bugId = req.params.bugId
+    console.log('bugId:', bugId)
+    bugService.getById(bugId)
+        .then(bug => res.send(bug))
+        .catch(err => {
+            // loggerService.error(err)
+            res.status(400).send('Cannot get car')
+        })
+})
+
+app.get('/api/bug/:bugId/remove', (req, res) => {
+    console.log('delete....');
+    const bugId = req.params.bugId
+    bugService.remove(bugId)
+        .then(() => res.send(bugId))
+        .catch((err) => {
+            // loggerService.error('Cannot remove bug', err)
+            res.status(400).send('Cannot remove bug')
+        })
+})
 
 
 app.listen(3030, () => console.log('Server ready at port 3030'))

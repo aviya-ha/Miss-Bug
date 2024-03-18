@@ -3,8 +3,8 @@ import fs from 'fs'
 import { utilService } from './util.service.js'
 export const bugService = {
     query,
-    // getById,
-    // remove,
+    getById,
+    remove,
     save
 }
 
@@ -13,18 +13,18 @@ function query() {
     return Promise.resolve(bugs)
 }
 
-// function getById(id) {
-//     const car = cars.find(car => car._id === id)
-//     if (!car) return Promise.reject('Car does not exist!')
-//     return Promise.resolve(car)
-// }
+function getById(id) {
+    const bug = bugs.find(bug => bug._id === id)
+    if (!bug) return Promise.reject('Car does not exist!')
+    return Promise.resolve(bug)
+}
 
-// function remove(id) {
-//     const carIdx = cars.findIndex(car => car._id === id)
-//     cars.splice(carIdx, 1)
-//     return _saveBugsToFile()
+function remove(id) {
+    const bugIdx = bugs.findIndex(bug => bug._id === id)
+    bugs.splice(bugIdx, 1)
+    return _saveBugsToFile()
 
-// }
+}
 
 function save(bug) {
     if (bug._id) {
