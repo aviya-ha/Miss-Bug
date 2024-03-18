@@ -9,7 +9,7 @@ export function BugIndex() {
 
     useEffect(() => {
         loadBugs()
-    }, [])
+    }, [bugs])
 
     function loadBugs() {
         bugService.query().then(setBugs)

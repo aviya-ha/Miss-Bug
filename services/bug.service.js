@@ -15,7 +15,7 @@ function query() {
 
 function getById(id) {
     const bug = bugs.find(bug => bug._id === id)
-    if (!bug) return Promise.reject('Car does not exist!')
+    if (!bug) return Promise.reject('Bug does not exist!')
     return Promise.resolve(bug)
 }
 
@@ -32,7 +32,7 @@ function save(bug) {
         bugs[bugIdx] = bug
     } else {
         bug._id = utilService.makeId()
-        bug.description = utilService.makeLorem()
+        bug.description =  bug.description ? bug.description : utilService.makeLorem()
         bug.createdAt = Date.now()
         bugs.unshift(bug)
     }
