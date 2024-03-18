@@ -8,7 +8,7 @@ export const bugService = {
     save
 }
 
-const bugs = utilService.readJsonFile('data/bugs.json')
+const bugs = utilService.readJsonFile('data/bug.json')
 function query() {
     return Promise.resolve(bugs)
 }
