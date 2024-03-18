@@ -43,21 +43,25 @@ function _createBugs() {
             {
                 title: "Infinite Loop Detected",
                 severity: 4,
+                description: 'cant stop looking for what you are looking for',
                 _id: "1NF1N1T3"
             },
             {
                 title: "Keyboard Not Found",
                 severity: 3,
+                description: 'cant find what you are looking for',
                 _id: "K3YB0RD"
             },
             {
                 title: "404 Coffee Not Found",
                 severity: 2,
+                description: 'cant continue existing',
                 _id: "C0FF33"
             },
             {
                 title: "Unexpected Response",
                 severity: 1,
+                description: 'found something strange',
                 _id: "G0053"
             }
         ]
