@@ -1,17 +1,22 @@
 import express from 'express'
-import cookieParser from 'cookie-parser'
-import { loggerService } from './services/logger.service.js'
-
 import { bugService } from './services/bug.service.js'
-
+import { loggerService } from './services/logger.service.js'
+import cookieParser from 'cookie-parser'
 const app = express()
 
 app.use(express.static('public'))
 app.use(cookieParser())
+app.use(express.json())
 
 
 app.get('/api/bug', (req, res) => {
-    bugService.query()
+    const filterBy = {
+        txt: req.query.txt || '',
+        severity: +req.query.severity || '',
+        // desc: req.query.desc || '',
+        // pageIdx: req.query.pageIdx
+    }
+    bugService.query(filterBy)
         .then(bugs => {
             res.send(bugs)
         })
@@ -21,17 +26,26 @@ app.get('/api/bug', (req, res) => {
         })
 })
 
-app.get('/api/bug/save', (req, res) => {
+app.post('/api/bug', (req, res) => {
+    console.log('req.body:', req.body)
+    const bugToSave = req.body
+    bugService.save(bugToSave)
+        .then(bug => res.send(bug))
+        .catch((err) => {
+            loggerService.error('Cannot save bug', err)
+            res.status(400).send('Cannot save bug')
+        })
+})
 
-    loggerService.debug('req.query', req.query)
-
+app.put('/api/bug', (req, res) => {
+    console.log('req.body:', req.body)
 
     const bugToSave = {
-        title: req.query.title,
-        severity: +req.query.severity,
-        description: req.query.description,
-        _id: req.query.bugId,
-        createdAt: req.query.createdAt
+        title: req.body.title,
+        severity: +req.body.severity,
+        description: req.body.description,
+        _id: req.body._id,
+        createdAt: req.body.createdAt
     }
     bugService.save(bugToSave)
         .then(bug => res.send(bug))
@@ -43,18 +57,13 @@ app.get('/api/bug/save', (req, res) => {
 
 app.get('/api/bug/:bugId', (req, res) => {
     const { bugId } = req.params
-
     const { visitedBugs = [] } = req.cookies
-
     console.log('visitedBugs', visitedBugs)
     if (!visitedBugs.includes(bugId)) {
         if (visitedBugs.length >= 3) return res.status(401).send('Wait for a bit')
         else visitedBugs.push(bugId)
     }
-
     res.cookie('visitedBugs', visitedBugs, { maxAge: 1000 * 70 })
-
-
     console.log('bugId:', bugId)
     bugService.getById(bugId)
         .then(bug => res.send(bug))
@@ -64,7 +73,7 @@ app.get('/api/bug/:bugId', (req, res) => {
         })
 })
 
-app.get('/api/bug/:bugId/remove', (req, res) => {
+app.delete('/api/bug/:bugId', (req, res) => {
     console.log('delete....');
     const bugId = req.params.bugId
     bugService.remove(bugId)
@@ -79,9 +88,8 @@ app.get('/api/bug/:bugId/remove', (req, res) => {
         })
 })
 
-
 app.listen(3030, () => console.log('`Server listening on port http://127.0.0.1:3030/'))
 // const PORT = 3030
 // app.listen(PORT, () =>
-    // loggerService.info(`Server listening on port http://127.0.0.1:${PORT}/`)
+// loggerService.info(`Server listening on port http://127.0.0.1:${PORT}/`)
 // )

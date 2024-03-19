@@ -11,26 +11,18 @@ _createBugs()
 export const bugService = {
     query,
     getById,
-    save,
     remove,
+    save,
     getDefaultFilter,
+    getEmptyBug,
+    getFilterFromParams
 }
 
 
-function query(filterBy = {}) {
-    return axios.get(BASE_URL)
+function query(filterBy = getDefaultFilter()) {
+    return axios.get(BASE_URL, { params: filterBy })
     .then(res => res.data)
-    .then(bugs => {
-        if (filterBy.txt) {
-            const regExp = new RegExp(filterBy.txt, 'i')
-            bugs = bugs.filter(bug => regExp.test(bug.title) || regExp.test(bug.description))
-        }
-
-        if (filterBy.severity) {
-            bugs = bugs.filter(bug => bug.severity >= filterBy.severity)
-        }
-        return bugs
-    })
+    
 }
 
 
@@ -43,20 +35,34 @@ function getById(bugId) {
 }
 
 function remove(bugId) {
-    return axios.get(BASE_URL + bugId + '/remove').then(res => res.data)
+    return axios.get(BASE_URL + bugId).then(res => res.data)
 }
 
 function save(bug) {
-    console.log('bug:', bug)
-    const url = BASE_URL + 'save'
-    let queryParams = `?title=${bug.title}&severity=${bug.severity}&description=${bug.description}`
+   console.log('bug:', bug)
     if (bug._id) {
-        queryParams += `&bugId=${bug._id}`
+        return axios.put(BASE_URL, bug)
+    } else {
+        return axios.post(BASE_URL, bug)
     }
-    return axios.get(url + queryParams).then(res => res.data)
 }
 
+function getEmptyBug(title ='', description= '', severity= 5) {
+    return { title, description, severity }
+}
 
+function getDefaultFilter() {
+    return { txt: '', severity: ''}
+}
+
+function getFilterFromParams(searchParams = {}) {
+    const defaultFilter = getDefaultFilter()
+    return {
+        txt: searchParams.get('txt') || defaultFilter.txt,
+        severity: searchParams.get('severity') || defaultFilter.severity,
+        // desc: searchParams.get('desc') || defaultFilter.desc
+    }
+}
 
 
 function _createBugs() {
@@ -92,10 +98,3 @@ function _createBugs() {
     }
 }
 
-function getEmptyBug() {
-    return { title: '', description: '', severity: 5 }
-}
-
-function getDefaultFilter() {
-    return { txt: '', severity: '' }
-}

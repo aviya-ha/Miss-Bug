@@ -1,11 +1,12 @@
 const { useState, useEffect } = React
 const { Link } = ReactRouterDOM
 
+import { BugList } from '../cmps/BugList.jsx'
+import { BugFilter } from '../cmps/BugFilter.jsx'
 
 import { bugService } from '../services/bug.service.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
-import { BugList } from '../cmps/BugList.jsx'
-import { BugFilter } from '../cmps/BugFilter.jsx'
+import { utilService } from '../services/util.service.js'
 
 export function BugIndex() {
     const [bugs, setBugs] = useState(null)
@@ -50,7 +51,9 @@ export function BugIndex() {
             .save(bug)
             .then((savedBug) => {
                 console.log('Added Bug', savedBug)
-                setBugs([...bugs, savedBug])
+                setBugs(prevBugs=>[...prevBugs, savedBug.data])
+                console.log('bugs:', bugs)
+
                 showSuccessMsg('Bug added')
             })
             .catch((err) => {
@@ -60,14 +63,15 @@ export function BugIndex() {
     }
 
     function onEditBug(bug) {
+        console.log('bug:', bug)
         const severity = +prompt('New severity?')
         const bugToSave = { ...bug, severity }
         bugService
             .save(bugToSave)
             .then((savedBug) => {
-                console.log('Updated Bug:', savedBug)
+                console.log('Updated Bug:', savedBug.data)
                 const bugsToUpdate = bugs.map((currBug) =>
-                    currBug._id === savedBug._id ? savedBug : currBug
+                    currBug._id === savedBug.data._id ? savedBug.data : currBug
                 )
                 setBugs(bugsToUpdate)
                 showSuccessMsg('Bug updated')
