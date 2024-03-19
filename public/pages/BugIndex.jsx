@@ -1,18 +1,24 @@
+const { useState, useEffect } = React
+const { Link } = ReactRouterDOM
+
+
 import { bugService } from '../services/bug.service.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { BugList } from '../cmps/BugList.jsx'
-
-const { useState, useEffect } = React
+import { BugFilter } from '../cmps/BugFilter.jsx'
 
 export function BugIndex() {
     const [bugs, setBugs] = useState(null)
+    const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
 
     useEffect(() => {
         loadBugs()
-    }, [bugs])
+        showSuccessMsg('Welcome to bug index!')
+
+    }, [filterBy])
 
     function loadBugs() {
-        bugService.query().then(setBugs)
+        bugService.query(filterBy).then((bugs) => setBugs(bugs))
     }
 
     function onRemoveBug(bugId) {
@@ -28,6 +34,10 @@ export function BugIndex() {
                 console.log('Error from onRemoveBug ->', err)
                 showErrorMsg('Cannot remove bug')
             })
+    }
+
+    function onSetFilter(filterBy) {
+        setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterBy }))
     }
 
     function onAddBug() {
@@ -72,6 +82,7 @@ export function BugIndex() {
         <main>
             <h3>Bugs App</h3>
             <main>
+                <BugFilter onSetFilter={onSetFilter} filterBy={filterBy} />
                 <button onClick={onAddBug}>Add Bug ⛐</button>
                 <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>
