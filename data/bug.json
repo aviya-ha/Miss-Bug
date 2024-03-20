@@ -1,1 +1,71 @@
-[]
+[
+    {
+      "title": "Good bug",
+      "severity": 2,
+      "ownerId": "GKEge",
+      "createdAt": 1669742220370,
+      "_id": "MgX8V",
+      "labels": [
+        "popular",
+        "dev-branch"
+      ],
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at."
+    },
+    {
+      "title": "Fix header",
+      "severity": 5,
+      "createdAt": 1702907299478,
+      "labels": [
+        "CR",
+        "dev-branch",
+        "high"
+      ],
+      "_id": "zVg6b",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at."
+    },
+    {
+      "title": "Do QA to the filter",
+      "severity": 6,
+      "createdAt": 1702908284576,
+      "labels": [
+        "critical",
+        "high"
+      ],
+      "_id": "dkZi1",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at."
+    },
+    {
+      "title": "bug",
+      "severity": 2,
+      "createdAt": 1702922630093,
+      "labels": [
+        "critical",
+        "CR"
+      ],
+      "_id": "M95lU",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at."
+    },
+    {
+      "title": "aaaaa",
+      "severity": 3,
+      "ownerId": "u102",
+      "createdAt": 1702985913887,
+      "labels": [
+        "critical",
+        "CR"
+      ],
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at.",
+      "_id": "3fbw2"
+    },
+    {
+      "title": "yoyo",
+      "severity": 2,
+      "createdAt": 1710911821319,
+      "labels": [
+        "critical",
+        "CR"
+      ],
+      "_id": "jSXac",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at."
+    }
+  ]

@@ -9,9 +9,10 @@ export const bugService = {
     remove,
     save
 }
+const PAGE_SIZE = 2
 
 
-function query(filterBy) {
+function query(filterBy = { txt: '', minSeverity: 0 },sortBy  = { type: '', desc: 1 }) {
     let bugsToReturn = bugs
 
     if (filterBy.txt) {
@@ -22,11 +23,24 @@ function query(filterBy) {
     if (filterBy.severity) {
         bugsToReturn = bugsToReturn.filter(bug => bug.severity >= filterBy.severity)
     }
-    // if (filterBy.pageIdx !== undefined) {
-    //     const pageIdx = +filterBy.pageIdx
-    //     const startIdx = pageIdx * PAGE_SIZE
-    //     carsToReturn = carsToReturn.slice(startIdx, startIdx + PAGE_SIZE)
-    // }
+
+    if (filterBy.labels) {
+        const labelsToFilter = filterBy.labels
+        bugsToReturn = bugsToReturn.filter(bug =>
+            labelsToFilter.every(label => bug.labels.includes(label)))
+    }
+
+    if (sortBy.type === 'createdAt') {
+        bugsToReturn.sort((b1, b2) => (+sortBy.dir) * (b1.createdAt - b2.createdAt))
+    } else if(sortBy.type === 'severity'){
+        bugsToReturn.sort((b1, b2) => (+sortBy.dir) * (b1.severity - b2.severity))
+    }
+
+    if (filterBy.pageIdx !== undefined) {
+        // if (PAGE_SIZE <= 0) PAGE_SIZE = 1
+        const startIdx = filterBy.pageIdx * PAGE_SIZE;
+        bugsToReturn = bugsToReturn.slice(startIdx, startIdx + PAGE_SIZE)
+    }
 
     return Promise.resolve(bugsToReturn)
 }

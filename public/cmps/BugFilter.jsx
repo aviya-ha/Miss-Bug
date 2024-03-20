@@ -1,7 +1,11 @@
 const {useState, useEffect} = React
+import { LabelSelector } from "./LabelSelect.jsx"
 
 export function BugFilter({filterBy, onSetFilter}) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
+
+	const labels = ['critical', 'CR', 'dev-branch', 'popular', 'high']
+
 
   useEffect(() => {
     onSetFilter(filterByToEdit)
@@ -13,17 +17,25 @@ export function BugFilter({filterBy, onSetFilter}) {
     setFilterByToEdit((prevFilterBy) => ({...prevFilterBy, [field]: value}))
   }
 
-  function onSubmitFilter(ev) {
-    ev.preventDefault()
-    onSetFilter(filterByToEdit)
-  }
+  function onLabelChange(selectedLabels) {
+
+		setFilterByToEdit(prevFilter => ({
+			...prevFilter,
+			labels: selectedLabels,
+		}))
+	}
+
+  // function onSubmitFilter(ev) {
+  //   ev.preventDefault()
+  //   onSetFilter(filterByToEdit)
+  // }
 
   const {txt, severity} = filterByToEdit
   return (
     <section className="bug-filter full main-layout">
       <h2>Filter Our Bugs</h2>
 
-      <form onSubmit={onSubmitFilter}>
+      {/* <form onSubmit={onSubmitFilter}> */}
         <label htmlFor="txt">Vendor:</label>
         <input
           value={txt}
@@ -43,9 +55,10 @@ export function BugFilter({filterBy, onSetFilter}) {
           id="severity"
           placeholder="By Severity"
         />
+			<LabelSelector labels={labels} onLabelChange={onLabelChange} />
 
         <button>Filter Bugs</button>
-      </form>
+      {/* </form> */}
     </section>
   )
 }

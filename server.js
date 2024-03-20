@@ -1,7 +1,7 @@
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
-import cookieParser from 'cookie-parser'
 const app = express()
 
 app.use(express.static('public'))
@@ -13,10 +13,18 @@ app.get('/api/bug', (req, res) => {
     const filterBy = {
         txt: req.query.txt || '',
         severity: +req.query.severity || '',
-        // desc: req.query.desc || '',
-        // pageIdx: req.query.pageIdx
+        labels: req.query.labels || ''
     }
-    bugService.query(filterBy)
+
+    const sortBy = {
+        type: req.query.type || '',
+        dir: +req.query.dir || 1
+    }
+
+    if (req.query.pageIdx) filterBy.pageIdx = req.query.pageIdx
+
+
+    bugService.query(filterBy , sortBy)
         .then(bugs => {
             res.send(bugs)
         })
