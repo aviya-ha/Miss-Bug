@@ -1,6 +1,8 @@
 import fs from 'fs'
 
 import { utilService } from './util.service.js'
+let bugs = utilService.readJsonFile('data/bug.json')
+
 export const bugService = {
     query,
     getById,
@@ -8,7 +10,7 @@ export const bugService = {
     save
 }
 
-const bugs = utilService.readJsonFile('data/bug.json')
+
 function query(filterBy) {
     let bugsToReturn = bugs
 
@@ -36,10 +38,10 @@ function getById(id) {
 }
 
 function remove(id) {
+    console.log(':sad')
     const bugIdx = bugs.findIndex(bug => bug._id === id)
     bugs.splice(bugIdx, 1)
     return _saveBugsToFile()
-
 }
 
 function save(bug) {

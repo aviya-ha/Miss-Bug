@@ -80,7 +80,7 @@ app.delete('/api/bug/:bugId', (req, res) => {
         .then(() => {
             loggerService.info(`Bug ${bugId} removed`)
 
-            res.send(bugId)
+            res.send('removed')
         })
         .catch((err) => {
             loggerService.error('Cannot remove bug', err)
