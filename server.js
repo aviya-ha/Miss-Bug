@@ -2,6 +2,7 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
+import { userService } from './services/user.service.js'
 const app = express()
 
 app.use(express.static('public'))
@@ -96,6 +97,21 @@ app.delete('/api/bug/:bugId', (req, res) => {
         })
 })
 
+
+
+// user
+
+app.post('/api/auth/signup', (req, res) => {
+    const credentials = req.body
+    userService.save(credentials)
+        .then(user => {
+            if (user) {
+                res.send(user)
+            } else {
+                res.status(400).send('Cannot signup')
+            }
+        })
+})
 app.listen(3030, () => console.log('`Server listening on port http://127.0.0.1:3030/'))
 // const PORT = 3030
 // app.listen(PORT, () =>

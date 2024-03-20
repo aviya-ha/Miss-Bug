@@ -1,11 +1,7 @@
 import fs from 'fs'
-// import fr from 'follow-redirects'
-// const { http, https } = fr
 
 export const utilService = {
     readJsonFile,
-    // download,
-    // httpGet,
     makeId,
     makeLorem
 }
@@ -17,46 +13,6 @@ function readJsonFile(path) {
     return json
 }
 
-// function download(url, fileName) {
-//     return new Promise((resolve, reject) => {
-//         const file = fs.createWriteStream(fileName)
-//         https.get(url, (content) => {
-//             content.pipe(file)
-//             file.on('error', reject)
-//             file.on('finish', () => {
-//                 file.close()
-//                 resolve()
-//             })
-//         })
-//     })
-// }
-
-
-// function httpGet(url) {
-//     const protocol = url.startsWith('https') ? https : http
-//     const options = {
-//         method: 'GET',
-//     }
-//     return new Promise((resolve, reject) => {
-//         const req = protocol.request(url, options, res => {
-
-//             let data = ''
-//             res.on('data', chunk => {
-//                 data += chunk
-//             })
-
-//             res.on('end', () => {
-//                 resolve(data)
-//             })
-//         })
-//         req.on('error', err => {
-//             reject(err)
-//         })
-//         req.end()
-//     })
-// }
-
-
 function makeId(length = 5) {
     let text = ''
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -65,8 +21,6 @@ function makeId(length = 5) {
     }
     return text
 }
-
-
 
 function makeLorem(size = 100) {
     var words = ['The sky', 'above', 'the port', 'was', 'the color of television', 'tuned', 'to', 'a dead channel', '.', 'All', 'this happened', 'more or less', '.', 'I', 'had', 'the story', 'bit by bit', 'from various people', 'and', 'as generally', 'happens', 'in such cases', 'each time', 'it', 'was', 'a different story', '.', 'It', 'was', 'a pleasure', 'to', 'burn']
