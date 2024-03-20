@@ -1,7 +1,5 @@
 import fs from 'fs'
-
 import { utilService } from './util.service.js'
-let bugs = utilService.readJsonFile('data/bug.json')
 
 export const bugService = {
     query,
@@ -9,10 +7,12 @@ export const bugService = {
     remove,
     save
 }
-const PAGE_SIZE = 2
+
+let bugs = utilService.readJsonFile('data/bug.json')
+const PAGE_SIZE = 6
 
 
-function query(filterBy = { txt: '', minSeverity: 0 },sortBy  = { type: '', desc: 1 }) {
+function query(filterBy = { txt: '', minSeverity: 0 }, sortBy = { type: '', desc: 1 }) {
     let bugsToReturn = bugs
 
     if (filterBy.txt) {
@@ -32,7 +32,7 @@ function query(filterBy = { txt: '', minSeverity: 0 },sortBy  = { type: '', desc
 
     if (sortBy.type === 'createdAt') {
         bugsToReturn.sort((b1, b2) => (+sortBy.dir) * (b1.createdAt - b2.createdAt))
-    } else if(sortBy.type === 'severity'){
+    } else if (sortBy.type === 'severity') {
         bugsToReturn.sort((b1, b2) => (+sortBy.dir) * (b1.severity - b2.severity))
     }
 
@@ -52,25 +52,38 @@ function getById(id) {
 }
 
 function remove(id) {
-    console.log(':sad')
     const bugIdx = bugs.findIndex(bug => bug._id === id)
     bugs.splice(bugIdx, 1)
     return _saveBugsToFile()
 }
 
 function save(bug) {
+    bug = {
+        title: "yoyo",
+        severity: 2,
+        createdAt: '',
+        labels: [
+            "critical",
+            "CR"
+        ],
+        _id: '',
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at.",
+        creator: {
+            _id: "JYJC9",
+            fullname: "user1 user1"
+        }
+    }
     if (bug._id) {
         const bugIdx = bugs.findIndex(_bug => _bug._id === bug._id)
         bugs[bugIdx] = bug
     } else {
         bug._id = utilService.makeId()
-        // bug.description = bug.description ? bug.description : utilService.makeLorem()
+        bug.description = bug.description ? bug.description : utilService.makeLorem()
         bug.createdAt = Date.now()
         bugs.unshift(bug)
     }
     return _saveBugsToFile().then(() => bug)
 }
-
 
 function _saveBugsToFile() {
     return new Promise((resolve, reject) => {

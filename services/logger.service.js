@@ -21,7 +21,6 @@ if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir)
 }
 
-//define the time format
 function getTime() {
     let now = new Date()
     return now.toLocaleString('he')
